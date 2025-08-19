@@ -58,3 +58,15 @@ Our goal is to:
 ---
 
 ## Repo Structure
+
+/README.md        → This document
+/docs/            → Notes, symbolic mappings
+/sim/             → Python scripts for fractal generation
+/prototypes/      → Build photos & test logs
+/data/            → SDR captures, VNA sweeps
+
+---
+
+## License
+Open-source under MIT License.  
+Feel free to fork, remix, and expand the exploration of **lightning-born geometries for RF intelligence**.
