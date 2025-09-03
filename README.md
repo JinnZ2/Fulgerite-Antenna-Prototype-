@@ -70,3 +70,6 @@ Our goal is to:
 ## License
 Open-source under MIT License.  
 Feel free to fork, remix, and expand the exploration of **lightning-born geometries for RF intelligence**.
+
+
+[📖 See Scope & Scaling Philosophy](./SCOPE.md)
