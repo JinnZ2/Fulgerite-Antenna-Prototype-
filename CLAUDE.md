@@ -7,26 +7,64 @@ Experimental RF/antenna design project exploring **fulgurite-inspired fractal ge
 ## Repository Structure
 
 ```
-/README.md              — Project overview, approach, roadmap, symbolic mapping
+/README.md              — Project overview, approach, roadmap, key findings
 /LICENSE                — MIT License
 /CLAUDE.md              — This file (AI assistant guidance)
-/requirements.txt       — Python dependencies (numpy, matplotlib)
+/requirements.txt       — Python dependencies (numpy, matplotlib, scipy)
 /sim/                   — Python simulation and analysis scripts
-  fractal_generator.py  — Fractal antenna geometry generator
+  fractal_generator.py  — Lichtenberg / fractal tree geometry generator
+  space_filling.py      — Koch and Hilbert curve generators
+  antenna_physics.py    — RF physics core (loss, efficiency, Chu bound, noise)
+  resonance_calc.py     — Bracketed resonance prediction
+  link_budget.py        — Satellite link budget (NOAA APT and friends)
   layout_exporter.py    — Printable SVG template exporter
   sdr_analysis.py       — SDR/VNA data analysis and plotting
-  resonance_calc.py     — Resonance frequency calculator
+/docs/                  — Physics and measurement documentation
+  physics_model.md      — Every equation, assumption and failure mode
+  measurement_protocol.md — Bench procedure for valid A/B comparison
+/degradation_harvesting/ — Separate sub-project: energy from material failure
+  notes/                — Framework, architecture, refinements, build
+  sim/                  — microfracture_harvest_sim.py
+  hardware/             — SCAD, Arduino sketch, rectifier notes
+/megacasting/           — Separate sub-project: dendrite growth simulation
+  dendrite_sim.py
 ```
 
 ### Planned directories (not yet created)
 
 ```
-/docs/             — Notes and symbolic mappings
 /prototypes/       — Build photos and test logs
 /data/             — SDR captures, VNA sweeps
 ```
 
 A `SCOPE.md` file is referenced in the README but does not exist yet.
+
+## Physics Ground Rules (read before changing any model)
+
+These corrections are load-bearing. Do not regress them.
+
+1. **Branches are electrically parallel, not in series.** Resonance is set by the
+   **longest root-to-leaf path**, never by total wire length. The old
+   `f0 = c/(2*L_eff)` with `L_eff` = total wire was wrong by ~2.5×.
+2. **Loss scales with total wire; tuning scales with the longest path.** This
+   asymmetry is why branching factor is a direct efficiency cost.
+3. **Report brackets, not false precision.** `f_low` and `f_high` are hard
+   physical bounds; `f_model` depends on empirical `ρ∞`/`n_sat` that are *not*
+   derived from first principles and need calibration against measurement.
+4. **The Chu–Harrington/McLean bound is inviolable.** `Q ≥ η(1/(ka)³ + 1/(ka))`
+   depends on size and efficiency only. Folding wire inside a sphere never
+   enlarges the sphere. Check any "small and broadband" claim against it.
+5. **A better S11 is not a better antenna.** A resistive load matches perfectly
+   and radiates nothing. Efficiency needs a Wheeler cap measurement.
+6. **At 137 MHz there is no external-noise headroom.** Sky temp ≈ 269 K ≈ the
+   conductor's own temperature, so inefficiency costs the full `10·log₁₀(η)`.
+   The HF intuition that "loss is free because the sky is hot" does not transfer.
+7. **A fulgurite is a dielectric** (fused silica), not a conductor. Phase 3
+   casting is dielectric loading, and it shrinks the enclosing sphere — which
+   tightens rule 4.
+
+If a result seems to violate rules 4 or 6, suspect the measurement first; see
+`docs/measurement_protocol.md` §1 (unchoked feedline is the usual culprit).
 
 ## Quick Start
 
@@ -34,17 +72,35 @@ A `SCOPE.md` file is referenced in the README but does not exist yet.
 pip install -r requirements.txt
 cd sim/
 
+# Validate the physics implementation against published values (35 assertions)
+python antenna_physics.py --self-test
+
 # Generate a fractal antenna and view it
 python fractal_generator.py --depth 5 --seed 42
+
+# Space-filling curves — the geometries that actually miniaturize
+python space_filling.py compare              # geometry trade table
+python space_filling.py koch --order 3
+python space_filling.py hilbert --order 3 --size 200
 
 # Export a printable wire-bending template
 python layout_exporter.py --depth 5 --seed 42 --output template.svg
 
-# Calculate resonance frequencies
+# Bracketed resonance prediction, with loss/bandwidth/noise analysis
 python resonance_calc.py --depth 5 --report
+python resonance_calc.py --depth 5 --seed 42 --compare-models --physics
 
 # Design an antenna for a target frequency (e.g. NOAA at 137.1 MHz)
 python resonance_calc.py --target-freq 137.1e6
+
+# Conductor physics and the external-noise study
+python antenna_physics.py --freq 137.1e6 --length 1000 --material copper
+python antenna_physics.py --materials
+python antenna_physics.py --noise-sweep
+
+# Will a NOAA APT pass actually decode?
+python link_budget.py --elevation 30 --efficiency 0.5
+python link_budget.py --sweep-elevation
 
 # Analyze SDR spectrum data
 python sdr_analysis.py spectrum capture.csv --show-peaks
@@ -65,9 +121,14 @@ python sdr_analysis.py compare baseline.csv fractal.csv --labels "Dipole,Fractal
 ## Key Technical Parameters
 
 - **Fractal geometry:** Lichtenberg/fractal tree patterns with 30-40 degree angle variance, branch scaling ratio r = 0.6-0.7
-- **Resonance model:** `f0 = c / (2 * L_eff)` where `L_eff` = total unfolded branch length
+- **Resonance model:** bracketed quarter-wave monopole over the longest current
+  path, with an end-effect factor `k` from the induced-EMF solution and a
+  saturating fold-compression `ρ`. See `docs/physics_model.md` §1.
 - **Test frequencies:** 137 MHz (NOAA APT), 162 MHz (weather), 400-1600 MHz (broadband)
 - **Baseline comparison:** standard dipole antenna
+- **Validity:** thin-wire assumption throughout (length/diameter ≳ 50); 2-D
+  geometry; no mutual coupling between branches; no ground-plane model. For
+  anything beyond design intuition, export to NEC-2 / PyNEC.
 
 ## Development Workflow
 
