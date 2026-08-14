@@ -10,6 +10,17 @@ The short version: the original project model was `f0 = c / (2 · L_eff)` with
 branching structure, by roughly a factor of 2.5 for the default geometry, and it
 says nothing about whether the antenna can receive. What follows replaces it.
 
+That model is preserved, runnable, at
+[`legacy/resonance_model_v1.py`](../legacy/resonance_model_v1.py), frozen at the
+commit where it failed. The full ledger of tested-and-abandoned claims is
+[`legacy/README.md`](../legacy/README.md).
+
+> **Epistemic status.** Everything below is analytic. No antenna has been built
+> and no sweep taken, so these models are **unrefuted, not confirmed**. The
+> refutation of the old model was by internal inconsistency with physical
+> bounds — decisive against it, but no evidence for the replacement.
+> `legacy/README.md` §4 states what would falsify what is written here.
+
 ---
 
 ## 1. The correction that matters most

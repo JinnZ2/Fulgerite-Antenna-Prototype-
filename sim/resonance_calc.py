@@ -38,6 +38,15 @@ before you trust it -- defaults are ballpark figures from the Koch literature.
 The legacy total-wire-length number is still printed, labelled, so you can see
 how far off it was.
 
+The superseded model is preserved and runnable at legacy/resonance_model_v1.py,
+frozen at the commit where it failed. Reproduce its refutation with:
+
+    python legacy/resonance_model_v1.py --falsification
+
+Note that refutation is ANALYTIC. This replacement model is unrefuted, not
+confirmed -- it has never met a measurement. legacy/README.md section 4 states
+what would falsify it.
+
 Usage:
     python resonance_calc.py                              # Default fractal
     python resonance_calc.py --depth 6 --length 150

@@ -135,6 +135,30 @@ Any "small *and* broadband" claim must clear this bound first.
 |---|---|
 | [docs/physics_model.md](./docs/physics_model.md) | Every equation, its assumptions, and where it breaks. References. |
 | [docs/measurement_protocol.md](./docs/measurement_protocol.md) | How to make the fractal-vs-dipole comparison actually mean something. |
+| [legacy/README.md](./legacy/README.md) | **The falsification log** — every claim this project has tested and abandoned, why, and what is still unknown. |
+
+---
+
+## Epistemic status
+
+**Every result in this repo so far is analytic. No antenna has been built, no
+sweep taken.** The corrections above were derived by checking the models against
+physical bounds and against the geometry they were computed from — cheap,
+decisive, and *not* the same as measurement.
+
+The current model is **unrefuted, not confirmed.** It has never met a bench.
+[`legacy/README.md`](./legacy/README.md) §4 states in advance what observations
+would falsify it, written down before the data exists so they cannot be quietly
+adjusted afterwards.
+
+Superseded models are kept, runnable, in [`/legacy/`](./legacy/) rather than
+deleted — a refuted claim is the reason its replacement exists, and deleting it
+just means the next builder rediscovers the same wall. Reproduce the central one
+yourself:
+
+```bash
+python legacy/resonance_model_v1.py --falsification
+```
 
 ---
 

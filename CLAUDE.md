@@ -28,7 +28,39 @@ Experimental RF/antenna design project exploring **fulgurite-inspired fractal ge
   hardware/             — SCAD, Arduino sketch, rectifier notes
 /megacasting/           — Separate sub-project: dendrite growth simulation
   dendrite_sim.py
+/legacy/                — Falsification log and frozen superseded models
+  README.md             — The ledger: claims tested, refuted, and still unknown
+  resonance_model_v1.py — v1 resonance model, FROZEN at the commit it failed
 ```
+
+## The /legacy/ Convention
+
+Superseded work is **preserved, not deleted**. A refuted model is the reason its
+replacement exists; deleting it means the next builder rebuilds it from the same
+intuition and hits the same wall.
+
+When you refute something in this repo:
+
+1. Freeze the artifact into `/legacy/` **exactly as it stood when it failed**.
+2. Add a ledger entry to `legacy/README.md` using the template in its §5.
+   Always fill in *Still unknown* — that field is where the next hypothesis
+   comes from.
+3. Record **how** it was refuted: analytic or experimental. These are not
+   equivalent.
+4. Edit the live claim in README.md and docs/ so old and new are both legible.
+
+**Do not fix, refactor, or optimise anything in `/legacy/`** — known defects are
+left in on purpose. A record that has been quietly corrected is no longer a
+record. New defects found in frozen code get *documented* in the ledger, not
+patched in place. The one permitted change is an import path when a file moves.
+
+Frozen models must still run: each carries a mode reproducing its own
+falsification (`python legacy/resonance_model_v1.py --falsification`).
+
+**Epistemic status:** every result so far is analytic — no hardware has been
+built. The current models are *unrefuted, not confirmed*. `legacy/README.md` §4
+states in advance what would falsify them; do not weaken those criteria after
+data arrives.
 
 ### Planned directories (not yet created)
 
