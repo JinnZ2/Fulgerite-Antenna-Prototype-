@@ -202,7 +202,7 @@ python link_budget.py --sweep-elevation
 ---
 
 ## License
-Open-source under MIT License.  
+Open-source under CC0 1.0 Universal.  
 Feel free to fork, remix, and expand the exploration of **lightning-born geometries for RF intelligence**.
 
 
