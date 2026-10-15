@@ -8,7 +8,7 @@ Experimental RF/antenna design project exploring **fulgurite-inspired fractal ge
 
 ```
 /README.md              — Project overview, approach, roadmap, key findings
-/LICENSE                — MIT License
+/LICENSE                — CC0 1.0 Universal (owner work; see LICENSE_HISTORY.md for prior MIT text)
 /CLAUDE.md              — This file (AI assistant guidance)
 /requirements.txt       — Python dependencies (numpy, matplotlib, scipy)
 /sim/                   — Python simulation and analysis scripts
@@ -141,6 +141,22 @@ python sdr_analysis.py spectrum capture.csv --show-peaks
 python sdr_analysis.py compare baseline.csv fractal.csv --labels "Dipole,Fractal"
 ```
 
+
+<!-- clone-refspec-note v1.1 -->
+## Cloning and pushing
+Shallow clones are single-branch by default.
+Before pushing any branch other than the default
+branch, run:
+
+    git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+    git fetch --depth 1
+
+Or clone with: git clone --depth 1 --no-single-branch <url>
+Without this, the first push of a new branch
+fails the tracking-ref check even when the
+commit landed.
+<!-- /clone-refspec-note v1.1 -->
+
 ## Technology Stack
 
 | Area | Tools / Languages |
@@ -185,7 +201,7 @@ All scripts live in `/sim/` and import from `fractal_generator.py` as the core m
 
 - Documentation uses Markdown with structured headings
 - Symbolic notation: lightning (fractal shape), spiral (resonance), gear (material tests), satellite dish (signal)
-- MIT licensed — open for forking and remixing
+- CC0 1.0 Universal for owner work; third-party material, if identified, retains its own terms (see LICENSE_HISTORY.md)
 - Scripts use argparse with `--help` for all options
 - Physical units: mm for lengths, Hz for frequencies, dB for power
 
