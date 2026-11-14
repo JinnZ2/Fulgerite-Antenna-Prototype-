@@ -1,3 +1,6 @@
+> Read first: [READING_PROTOCOL.md](READING_PROTOCOL.md) (how to read this repo).
+> Map, not prescription. Errors are data. Check it. Built for the need, revisable.
+
 Read [READ_ME_THIS_WAY.md](READ_ME_THIS_WAY.md) first.
 
 # Fulgurite Antenna Prototype
